@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0710">
+<meta name="description" content="Everything your browser will hand you on this machine: audio in and out, MIDI, displays, cameras, stylus, HID, serial, USB, Bluetooth, sensors, voices. Local only. Nothing leaves the tab.">
+<title>bum — a bum in a browser</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='14'>🪑</text></svg>">
+<link rel="stylesheet" href="bum.css">
+<script type="module" src="src/main.js"></script>
+</head>
+<body>
+
+<header class="top">
+  <h1>bum<span class="blink">_</span></h1>
+  <p class="lede">
+    You showed up. The seat was already here. A browser tab owns no hardware — it <b>asks</b>,
+    and the OS decides what to hand over. This page asks for <em>everything</em>, one thing at a time,
+    and shows you exactly what came back: what you can bring <b>in</b>, what you can send <b>out</b>,
+    and what this particular seat will let you do with it.
+  </p>
+  <p class="note">
+    Everything here runs in your tab. No network calls, no analytics, no upload — the
+    Content-Security-Policy on this site sets <b>connect-src 'none'</b>, so the browser enforces that
+    rather than asking you to take our word for it. Saved profiles live in this browser's localStorage;
+    exports download to your own disk. Nothing about your gear leaves this machine.
+  </p>
+</header>
+
+<div class="bar">
+  <div class="row tight">
+    <button id="btnWake">WAKE THE SEAT</button>
+    <button id="btnGrantAll">ASK FOR EVERYTHING</button>
+    <button id="btnRescan">RESCAN</button>
+    <div class="spacer"></div>
+    <button id="btnSave" class="tiny">SAVE PROFILE</button>
+    <button id="btnRestore" class="tiny" disabled>RESTORE</button>
+    <button id="btnExport" class="tiny">EXPORT JSON</button>
+  </div>
+  <div id="topline">nothing asked for yet.</div>
+  <nav class="jump">
+    <a href="#s-seat">seat</a><a href="#s-permissions">permissions</a><a href="#s-caps">allowed</a>
+    <a href="#s-engine">engine</a><a href="#s-audio-in">ins</a><a href="#s-mixer">mixer</a>
+    <a href="#s-audio-out">outs</a><a href="#s-midi">midi</a><a href="#s-screens">screens</a>
+    <a href="#s-cameras">cameras</a><a href="#s-human">human</a><a href="#s-wired">wired</a>
+    <a href="#s-sensors">sensors</a><a href="#s-outs">other outs</a><a href="#s-profile">profile</a><a href="#s-log">log</a>
+  </nav>
+</div>
+
+<section id="s-seat">
+  <aside>
+    <h2><i>0 ·</i> the seat</h2>
+    <p>The machine you sat down at, and how much of it this page is allowed to see at all.</p>
+    <p>None of this needs permission. It is the browser describing its own situation.</p>
+  </aside>
+  <div data-mod="seat"></div>
+</section>
+
+<section id="s-permissions">
+  <aside>
+    <h2><i>1 ·</i> permissions</h2>
+    <p>The gate. Nothing named, nothing captured, until you say yes here.</p>
+    <p>State comes from the Permissions API where the browser has one, and from what actually happened where it doesn't.</p>
+  </aside>
+  <div data-mod="permissions"></div>
+</section>
+
+<section id="s-caps">
+  <aside>
+    <h2><i>2 ·</i> allowed</h2>
+    <p>What this browser, on this machine, at this URL, will let a page do at all. No permission needed to find out.</p>
+    <p>Half of these are decided by the address bar, not by you: <b>https or localhost, or most of it is off.</b></p>
+  </aside>
+  <div data-mod="caps"></div>
+</section>
+
+<section id="s-engine">
+  <aside>
+    <h2><i>3 ·</i> engine</h2>
+    <p>The AudioContext is the rack. Nothing sounds until it is running, and a browser will not start one without a click.</p>
+    <p>The sample rate is normally chosen for you by the current default output device. You can try to insist.</p>
+  </aside>
+  <div data-mod="engine"></div>
+</section>
+
+<section id="s-audio-in">
+  <aside>
+    <h2><i>4 ·</i> ins</h2>
+    <p>Every audio input the OS is willing to mention. Arm one to find out what it really is: how many channels, at what rate, with which processing forced on.</p>
+    <p>Arm as many as you like. Each is its own stream with its own clock drift.</p>
+  </aside>
+  <div data-mod="audio-in"></div>
+</section>
+
+<section id="s-mixer">
+  <aside>
+    <h2><i>5 ·</i> mixer</h2>
+    <p>Every armed input gets a strip: level, placement, mute, solo. This is the part that makes the tab an interface rather than a readout.</p>
+    <p>Two outputs and you get a pan control. More than two and you get to choose which physical socket each input lands on.</p>
+  </aside>
+  <div data-mod="mixer"></div>
+</section>
+
+<section id="s-audio-out">
+  <aside>
+    <h2><i>6 ·</i> outs</h2>
+    <p>One engine speaks to one device. If that device has eight outs you address them as channels, discretely, one at a time.</p>
+    <p>A second device means a second engine and a second clock. There is no way around that from a tab.</p>
+  </aside>
+  <div data-mod="audio-out"></div>
+</section>
+
+<section id="s-midi">
+  <aside>
+    <h2><i>7 ·</i> midi</h2>
+    <p>Controllers and synths are gear too. Separate permission, separate API, no audio engine required.</p>
+    <p>Inputs show live bytes as they arrive. Outputs will take a note from you.</p>
+  </aside>
+  <div data-mod="midi"></div>
+</section>
+
+<section id="s-screens">
+  <aside>
+    <h2><i>8 ·</i> screens</h2>
+    <p>The display is an output, and usually the only one anybody notices. Here is what it can actually show: gamut, dynamic range, refresh.</p>
+  </aside>
+  <div data-mod="screens"></div>
+</section>
+
+<section id="s-cameras">
+  <aside>
+    <h2><i>9 ·</i> cameras</h2>
+    <p>Not the point of this page, but they are ins, and an honest inventory counts them.</p>
+  </aside>
+  <div data-mod="cameras"></div>
+</section>
+
+<section id="s-human">
+  <aside>
+    <h2><i>10 ·</i> human input</h2>
+    <p>You, as a device. A mouse reports a position. A stylus reports pressure, tilt and twist, and most pages throw all of it away.</p>
+    <p>Draw on the pad and watch what your hardware actually sends.</p>
+  </aside>
+  <div data-mod="human"></div>
+</section>
+
+<section id="s-wired">
+  <aside>
+    <h2><i>11 ·</i> wired &amp; wireless</h2>
+    <p>Everything that plugs in and refuses to be MIDI. Control surfaces, microcontrollers, whatever you built.</p>
+    <p>A page never gets a list of what is connected. It gets the one thing you hand it, and nothing else.</p>
+  </aside>
+  <div data-mod="wired"></div>
+</section>
+
+<section id="s-sensors">
+  <aside>
+    <h2><i>12 ·</i> sensors</h2>
+    <p>The machine noticing the room it is in. Tilt, spin, magnetic north, how bright it is, roughly where you are.</p>
+    <p>Mostly a phone story. On a desktop this section is honest about having nothing.</p>
+  </aside>
+  <div data-mod="sensors"></div>
+</section>
+
+<section id="s-outs">
+  <aside>
+    <h2><i>13 ·</i> other outs</h2>
+    <p>The rest of what a page can push into the world: a voice, a buzz, a screen kept awake, a notification, the clipboard.</p>
+  </aside>
+  <div data-mod="outs"></div>
+</section>
+
+<section id="s-profile">
+  <aside>
+    <h2><i>14 ·</i> profile</h2>
+    <p>What you had armed, pointed at, and mixed — kept in this browser so the seat remembers you.</p>
+    <p>The export is every section above as JSON, on your disk, for you.</p>
+  </aside>
+  <div data-mod="profile"></div>
+</section>
+
+<section id="s-log">
+  <aside>
+    <h2>log</h2>
+    <p>What happened, and why the browser behaves that way.</p>
+    <div class="row spaced"><button id="btnClearLog" class="tiny">CLEAR</button></div>
+  </aside>
+  <div class="log" id="log"></div>
+</section>
+
+<footer>
+  bum — a bum in a browser. no build, no dependencies, no network.
+  <a href="https://github.com/osfasofa/bum">source</a> · MIT.
+</footer>
+
+</body>
+</html>
